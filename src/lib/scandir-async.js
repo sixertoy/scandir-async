@@ -64,9 +64,10 @@
              *
              */
             this.files = function (base) {
-                var deferred = Q.defer();
+                var deferred = Q.defer(),
+                    p = Path.relative(process.cwd(), base);
                 //
-                FS.readdir(base, function (err, files) {
+                FS.readdir(p, function (err, files) {
                     if (err) {
                         deferred.reject(new Error('Invalid path. Aborted'));
                     } else {

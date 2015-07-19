@@ -109,9 +109,7 @@
                 helper.files(no_file_path).then(function (result) {
                     expect(result.length).toEqual(4);
                     done();
-                }, function (err) {
-                    // no error
-                });
+                }, function (err) {});
 
             });
 
@@ -304,32 +302,20 @@
                     // no data
                     expect(helper.options().root).toEqual(path);
                     done();
-                }, function (err) {
-                    // no error
-                    console.log(err);
-                    done();
-                });
+                }, function (err) {});
 
                 helper.exec(options).then(function (data) {
                     // no data
                     expect(helper.options().filters).toEqual(options.filters);
                     done();
-                }, function (err) {
-                    // no error
-                    console.log(err);
-                    done();
-                });
+                }, function (err) {});
 
                 helper.exec(path, options).then(function (data) {
                     // no data
                     expect(helper.options().root).toEqual(path);
                     expect(helper.options().filters).toEqual(options.filters);
                     done();
-                }, function (err) {
-                    // no error
-                    console.log(err);
-                    done();
-                });
+                }, function (err) {});
                 helper.build.restore();
 
             });
