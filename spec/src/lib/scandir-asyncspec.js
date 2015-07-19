@@ -29,8 +29,8 @@
         sinon = require('sinon'),
         lodash = require('lodash'),
         //
-        Utils = require(Path.join(cwd, 'src', 'server', 'lib', 'utils')),
-        Scandir = require(Path.join(cwd, 'src', 'server', 'lib', 'scandir'));
+        Utils = require(Path.join(cwd, 'src', 'lib', 'utils')),
+        Scandir = require(Path.join(cwd, 'src', 'lib', 'scandir-async'));
     /*
     exec = require(base).exec,
     build = require(base).build,
@@ -59,7 +59,7 @@
                     files: [],
                     stats: {},
                     fullpath: cwd,
-                    name: 'readmepad'
+                    name: Utils.dirname(cwd)
                 });
             });
         });
@@ -289,7 +289,7 @@
                 });
             });
 
-            xit('does not reject', function (done) {
+            it('does not reject', function (done) {
                 var path = Path.join(cwd, 'spec', 'expected', 'explore_method');
                 //
                 helper = new Scandir();
@@ -350,7 +350,7 @@
                 });
                 //
                 path = '.';
-                name = 'readmepad';
+                name = Utils.dirname(cwd);
                 helper.exec(path).then(function (data) {
                     expect(lodash.isPlainObject(data)).toBe(true);
                     // expect(data.name).toEqual(name);

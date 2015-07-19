@@ -14,5 +14,5 @@ module.exports = {
         extensions: 'js',
         specNameMatcher: 'spec'
     },
-    all: ['spec/']
+    all: []
 };

@@ -4,6 +4,6 @@
 
     'use strict';
 
-    module.exports = {};
+    module.exports = require('./src/lib/scandir-async.js');
 
 }());

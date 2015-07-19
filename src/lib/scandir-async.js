@@ -14,8 +14,8 @@
         lodash = require('lodash'),
         Utils = require('./utils'),
         //
-        // Object Scandir
-        Scandir = function () {
+        // Object ScandirAsync
+        ScandirAsync = function () {
 
             /**
              *
@@ -137,7 +137,7 @@
 
                                 }, function (err) {
                                     // erreur du chargement de fichier
-                                    msg = 'Scandir.build() recursive error';
+                                    msg = 'ScandirAsync.build() recursive error';
                                     console.log(chalk.red.bold(msg));
                                     deferred.reject(msg);
                                 });
@@ -146,20 +146,20 @@
 
                         }, function (err) {
                             // erreur du chargement de fichier
-                            msg = 'Scandir.build() files error';
+                            msg = 'ScandirAsync.build() files error';
                             console.log(chalk.red.bold(msg));
                             deferred.reject(msg);
                         });
 
                     } else {
-                        msg = 'Scandir.build() not a directory and not a file: ' + base;
+                        msg = 'ScandirAsync.build() not a directory and not a file: ' + base;
                         console.log(chalk.red.bold(msg));
                         throw new Error(msg);
                     }
 
                 }, function () {
                     // erreur du chargement de fichier
-                    msg = 'Scandir.build() browsable error';
+                    msg = 'ScandirAsync.build() browsable error';
                     console.log(chalk.red.bold(msg));
                     deferred.reject(msg);
                 });
@@ -184,7 +184,7 @@
 
             /**
              *
-             * Scandir Entry Point
+             * ScandirAsync Entry Point
              *
              */
             this.exec = function (pBase, pOptions) {
@@ -251,6 +251,6 @@
 
         };
 
-    module.exports = Scandir;
+    module.exports = ScandirAsync;
 
 }());

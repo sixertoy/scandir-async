@@ -10,7 +10,7 @@
         OS = require('os'),
         Path = require('path'),
         sinon = require('sinon'),
-        Utils = require(Path.join(cwd, 'src', 'server', 'lib', 'utils'));
+        Utils = require(Path.join(cwd, 'src', 'lib', 'utils'));
 
     describe('Utils', function () {
 
