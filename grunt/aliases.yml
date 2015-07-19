@@ -1,0 +1,12 @@
+serve:
+  - connect
+build_documentation:
+  - clean:documentation
+  - joli_markdown
+build:
+  - jshint
+  - jasmine_node
+  - build_documentation
+default:
+  - build
+  - watch
