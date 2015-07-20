@@ -10,5 +10,4 @@ before_script:
 script:
   - npm test --verbose
 after_success:
-  - istanbul cover jasmine-node --captureExceptions ./spec/
   - cat ./coverage/lcov.info | coveralls && rm -rf ./coverage

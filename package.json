@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean_modules": "rm -rf node_modules",
-    "test": "istanbul cover ./scripts/jasmine_node spec/src",
+    "test": "istanbul cover ./scripts/jasmine_node --captureExceptions spec/src",
     "start": "echo \"Error: no start specified\" && exit 1"
   },
   "engines": {
