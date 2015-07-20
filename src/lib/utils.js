@@ -6,6 +6,15 @@
 
     var Path = require('path'),
         utils = {
+            /*
+            remove: function (arr, find) {
+                var index = arr.indexOf(find);
+                if (index > -1) {
+                    arr.splice(index, 1);
+                }
+                return arr;
+            },
+            */
             dirname: function (base, sep) {
                 if (arguments.length < 2) {
                     base = Path.normalize(base);

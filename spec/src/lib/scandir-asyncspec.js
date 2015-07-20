@@ -97,8 +97,8 @@
                     done();
                 }, function (err) {
                     // no error
-                    console.log(err);
-                    done();
+                    // console.log(err);
+                    // done();
                 });
             });
 
@@ -110,8 +110,8 @@
                     done();
                 }, function (err) {
                     // no error
-                    console.log(err);
-                    done();
+                    // console.log(err);
+                    // done();
                 });
 
             });

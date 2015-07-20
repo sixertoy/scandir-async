@@ -75,6 +75,10 @@
                         deferred.reject(err);
 
                     } else {
+                        var excluded = ['.gitkeep'];
+                        files = files.filter(function (file) {
+                            return (excluded.indexOf(file) === -1);
+                        });
                         if (files.length) {
                             deferred.resolve(files);
                         } else {
