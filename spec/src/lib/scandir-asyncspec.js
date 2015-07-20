@@ -332,7 +332,7 @@
 
             });
 
-            xit('returns a plainObject w/ basename as property', function (done) {
+            it('returns a plainObject w/ basename as property', function (done) {
                 var name,
                     path = Path.join(cwd, 'spec', 'expected', 'explore_method');
                 name = Utils.dirname(path);
