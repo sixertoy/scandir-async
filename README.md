@@ -19,11 +19,11 @@ var treeObject = scandir.exec([folder], [options]);
 
 ## Options
 
-*** Folder
+#### Folder
 
-** absolute or relative path
+- absolute path
 
-*** Options Object
+#### Options Object
 
 **Not implemented yet**
 ```javascript
@@ -45,7 +45,7 @@ mkdir spec/expected/files_method/nofile
 mkdir spec/expected/files_method/threefile/subfolder
 ```
 
-A .gitkeep can be used, but scandir does not use filters yet
+A .gitkeep file can be used in empty folder, but scandir does not use filters yet
 
 ## History
 

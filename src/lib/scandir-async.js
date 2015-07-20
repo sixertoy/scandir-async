@@ -228,6 +228,7 @@
                 if (!lodash.isPlainObject(pOptions)) {
                     pOptions = {};
                 }
+
                 // si base n'est pas un chemin absolut
                 if (!Path.isAbsolute(pBase)) {
                     pBase = Path.join(process.cwd(), pBase);

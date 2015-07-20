@@ -5,7 +5,7 @@ before_install:
   - npm install -g grunt-cli istanbul jasmine-node coveralls
 before_script:
   - mkdir spec/expected/explore_method/subnofiles
-  - mkdir spec/expected/files_method/no_file
+  - mkdir spec/expected/files_method/nofile
   - mkdir spec/expected/files_method/threefile/subfolder
 script:
   - npm test --verbose
