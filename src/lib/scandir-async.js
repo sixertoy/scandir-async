@@ -68,12 +68,12 @@
             this.files = function (base) {
                 var deferred = Q.defer(),
                     relative = Path.relative(process.cwd(), base);
-                console.log(relative);
 
                 FS.readdir(relative, function (err, files) {
                     if (err) {
                         grunt.log.debug('ScandirAsync.files() :: ' + relative);
                         deferred.reject(err);
+
                     } else {
                         if (files.length) {
                             deferred.resolve(files);

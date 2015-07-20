@@ -97,12 +97,12 @@
                     done();
                 }, function (err) {
                     // no error
-                    // console.log(err);
-                    // done();
+                    console.log(err);
+                    done();
                 });
             });
 
-            it('Q.resolved with array of files - length 4', function (done) {
+            it('Q.resolved with array of files (length = 4)', function (done) {
                 var no_file_path = Path.join(cwd, 'spec', 'expected', 'files_method', 'threefile');
                 helper = new Scandir();
                 helper.files(no_file_path).then(function (result) {
@@ -110,8 +110,8 @@
                     done();
                 }, function (err) {
                     // no error
-                    // console.log(err);
-                    // done();
+                    console.log(err);
+                    done();
                 });
 
             });
