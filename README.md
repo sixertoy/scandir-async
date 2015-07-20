@@ -17,6 +17,31 @@ var scandir = require('scandir-async);
 var treeObject = scandir.exec([folder], [options]);
 ```
 
+## Tree Object
+
+```json
+{
+    "dirname":{
+        files: [{
+                files: false,
+                name: dirname,
+                stats: [NodeJS fs stats],
+                fullpath: /abs/path/to/dirname
+            }, {
+                files: [...],
+                name: dirname,
+                stats: [NodeJS fs stats],
+                fullpath: /abs/path/to/dirname
+            },
+            {...}
+        ],
+        name: dirname,
+        stats: [NodeJS fs stats],
+        fullpath: /abs/path/to/dirname
+    }
+}
+```
+
 ## Options
 
 #### Folder
