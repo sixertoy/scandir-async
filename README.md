@@ -6,9 +6,21 @@
 
 ## Install
 
+```bash
+npm install scandir-async
+```
+
 ## Usage
 
+```javascript
+var scandir = require('scandir-async);
+var treeObject = scandir.exec([folder], [options]);
+```
+
 ## Options
+
+```javascript
+```
 
 ## Issues
 

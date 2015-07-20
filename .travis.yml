@@ -3,7 +3,12 @@ node_js:
   - "0.12.0"
 before_install:
   - npm install -g grunt-cli istanbul jasmine-node coveralls
+before_script:
+  - mkdir spec/expected/explore_method/subnofiles
+  - mkdir spec/expected/files_method/no_file
+  - mkdir spec/expected/files_method/threefile/subfolder
 script:
   - npm test --verbose
 after_success:
-  - istanbul cover jasmine-node --captureExceptions ./spec/ && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage
+  - istanbul cover jasmine-node --captureExceptions ./spec/
+  - cat ./coverage/lcov.info | coveralls && rm -rf ./coverage
