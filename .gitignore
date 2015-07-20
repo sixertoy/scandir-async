@@ -201,3 +201,13 @@ bower_components/
 
 build/
 dist/
+
+#############################################################
+
+# Travis Custom
+
+#############################################################
+!spec/expected/files_method/nofile
+!spec/expected/files_method/threefile/subfolder
+
+
