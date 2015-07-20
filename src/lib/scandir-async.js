@@ -68,12 +68,12 @@
              *
              */
             this.files = function (base) {
-                var deferred = Q.defer(),
-                    relative = Path.relative(process.cwd(), base);
+                var deferred = Q.defer();
+                    // relative = Path.relative(process.cwd(), base);
 
-                FS.readdir(relative, function (err, files) {
+                FS.readdir(base, function (err, files) {
                     if (err) {
-                        grunt.log.debug('ScandirAsync.files() :: ' + relative);
+                        grunt.log.debug('ScandirAsync.files() :: ' + base);
                         deferred.reject(err);
 
                     } else {
@@ -96,12 +96,12 @@
              *
              */
             this.browsable = function (base) {
-                var deferred = Q.defer(),
-                    relative = Path.relative(process.cwd(), base);
+                var deferred = Q.defer();
+                    // relative = Path.relative(process.cwd(), base);
 
-                FS.stat(relative, function (err, stats) {
+                FS.stat(base, function (err, stats) {
                     if (err) {
-                        grunt.log.debug('ScandirAsync.browsable() :: ' + relative);
+                        grunt.log.debug('ScandirAsync.browsable() :: ' + base);
                         deferred.reject(err);
                     } else {
                         deferred.resolve(stats);

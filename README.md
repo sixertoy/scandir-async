@@ -19,10 +19,33 @@ var treeObject = scandir.exec([folder], [options]);
 
 ## Options
 
+*** Folder
+
+** absolute or relative path
+
+*** Options Object
+
+**Not implemented yet**
 ```javascript
+{
+    depth: 0,
+    filters: ['**/*.hml']
+}
 ```
 
 ## Issues
+
+### Tests
+
+Git add/clone does not take care of empty folder used for tests, it must be created manually
+
+```bash
+mkdir spec/expected/explore_method/subnofiles
+mkdir spec/expected/files_method/nofile
+mkdir spec/expected/files_method/threefile/subfolder
+```
+
+A .gitkeep can be used, but scandir does not use filters yet
 
 ## History
 
