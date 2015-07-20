@@ -14,7 +14,11 @@ npm install scandir-async
 
 ```javascript
 var scandir = require('scandir-async);
-var treeObject = scandir.exec([folder], [options]);
+scandir.exec([folder], [options]).then(function(data){
+    // Q.promise resolved
+}, function(err){
+    // Q.promise rejected
+});
 ```
 
 ## Tree Object
