@@ -89,7 +89,7 @@
                 });
             });
 
-            it('Q.resolved with false - no file in folder', function (done) {
+            it('Q.resolved with false (no file in folder)', function (done) {
                 var no_file_path = Path.join(cwd, 'spec', 'expected', 'files_method', 'nofile');
                 helper = new Scandir();
                 helper.files(no_file_path).then(function (result) {

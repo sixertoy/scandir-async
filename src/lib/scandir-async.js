@@ -45,13 +45,14 @@
              * @see https://strongloop.com/strongblog/how-to-compose-node-js-promises-with-q/
              *
              */
-            this.map = function (entries, scope, callback) {
+            this.map = function (entries, callback) {
+                var $this = this;
                 try {
                     var q = new Q();
                     return q.then(function () {
                         // inside a `then`, exceptions will be handled in next onRejected
                         return entries.map(function (node) {
-                            return callback(node, scope);
+                            return callback.apply($this, [node]);
                         });
                     }).all(); // return group promise
                 } catch (e) {
@@ -67,7 +68,7 @@
             this.files = function (base) {
                 var deferred = Q.defer(),
                     relative = Path.relative(process.cwd(), base);
-
+                console.log(relative);
 
                 FS.readdir(relative, function (err, files) {
                     if (err) {
@@ -109,14 +110,14 @@
              *
              *
              */
-            this.build = function (node, scope) {
+            this.build = function (node) {
                 var p, childs, msg,
-                    $this = scope,
+                    $this = this,
                     deferred = Q.defer(),
                     base = node.fullpath;
                 //
                 // retourne les stats pour un fichier
-                scope.browsable(base).then(function (stats) {
+                $this.browsable(base).then(function (stats) {
                     // ajout des stats au node
                     node.stats = stats;
                     // si c'est un fichier
@@ -128,7 +129,7 @@
                     } else if (stats.isDirectory()) {
                         // console.log('dir.name => ' + node.name);
                         node.files = [];
-                        scope.files(base).then(function (files) {
+                        $this.files(base).then(function (files) {
                             if (!files) {
                                 grunt.log.debug('contient pas de fichiers');
                                 node.files = false;
@@ -137,9 +138,9 @@
                             } else {
                                 node.files = files.map(function (file) {
                                     p = Path.join(base, file);
-                                    return scope.node(p, false);
+                                    return $this.node(p, false);
                                 });
-                                scope.map(node.files, scope, scope.build).then(function (res) {
+                                $this.map(node.files, $this.build).then(function (res) {
                                     deferred.resolve(node);
 
                                 }, function (err) {
@@ -241,7 +242,7 @@
                         child = $this.node($this.root, stats);
                         // console.log(child);
                         //
-                        $this.build(child, $this).then(function () {
+                        $this.build(child).then(function () {
                             // renvoi de l'objet main
                             main[child.name] = child;
                             deferred.resolve(main);
