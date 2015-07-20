@@ -7,5 +7,4 @@ before_install:
 script:
   - npm test --verbose
 after_success:
-  - istanbul cover jasmine-node --captureExceptions ./spec/
-  - cat ./coverage/lcov.info | coveralls && rm -rf ./coverage
+  - istanbul cover jasmine-node --captureExceptions ./spec/ && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage
