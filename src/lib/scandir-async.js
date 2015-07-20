@@ -11,6 +11,7 @@
         Path = require('path'),
         Util = require('util'),
         chalk = require('chalk'),
+        grunt = require('grunt'),
         lodash = require('lodash'),
         Utils = require('./utils'),
         //
@@ -65,11 +66,13 @@
              */
             this.files = function (base) {
                 var deferred = Q.defer(),
-                    p = Path.relative(process.cwd(), base);
-                //
-                FS.readdir(p, function (err, files) {
+                    relative = Path.relative(process.cwd(), base);
+
+
+                FS.readdir(relative, function (err, files) {
                     if (err) {
-                        deferred.reject(new Error('Invalid path. Aborted'));
+                        grunt.log.debug('ScandirAsync.files() :: ' + relative);
+                        deferred.reject(err);
                     } else {
                         if (files.length) {
                             deferred.resolve(files);
@@ -87,9 +90,12 @@
              *
              */
             this.browsable = function (base) {
-                var deferred = Q.defer();
-                FS.stat(base, function (err, stats) {
+                var deferred = Q.defer(),
+                    relative = Path.relative(process.cwd(), base);
+
+                FS.stat(relative, function (err, stats) {
                     if (err) {
+                        grunt.log.debug('ScandirAsync.browsable() :: ' + relative);
                         deferred.reject(err);
                     } else {
                         deferred.resolve(stats);
@@ -124,7 +130,7 @@
                         node.files = [];
                         scope.files(base).then(function (files) {
                             if (!files) {
-                                // console.log('contient pas de fichiers');
+                                grunt.log.debug('contient pas de fichiers');
                                 node.files = false;
                                 deferred.resolve(node);
 
@@ -138,31 +144,30 @@
 
                                 }, function (err) {
                                     // erreur du chargement de fichier
-                                    msg = 'ScandirAsync.build() recursive error';
-                                    console.log(chalk.red.bold(msg));
-                                    deferred.reject(msg);
+                                    // console.log(chalk.red.bold(msg));
+                                    grunt.log.debug('ScandirAsync.build() recursive error');
+                                    deferred.reject(err);
                                 });
 
                             }
 
                         }, function (err) {
                             // erreur du chargement de fichier
-                            msg = 'ScandirAsync.build() files error';
-                            console.log(chalk.red.bold(msg));
-                            deferred.reject(msg);
+                            grunt.log.debug('ScandirAsync.build() files error');
+                            deferred.reject(err);
                         });
 
                     } else {
                         msg = 'ScandirAsync.build() not a directory and not a file: ' + base;
-                        console.log(chalk.red.bold(msg));
+                        grunt.log.debug(msg);
                         throw new Error(msg);
                     }
 
-                }, function () {
+                }, function (err) {
                     // erreur du chargement de fichier
-                    msg = 'ScandirAsync.build() browsable error';
-                    console.log(chalk.red.bold(msg));
-                    deferred.reject(msg);
+                    // msg = 'ScandirAsync.build() browsable error';
+                    // console.log(chalk.red.bold(msg));
+                    deferred.reject(err);
                 });
                 return deferred.promise;
             };
@@ -234,6 +239,7 @@
                     } else {
                         // lancement de la recursivite
                         child = $this.node($this.root, stats);
+                        // console.log(child);
                         //
                         $this.build(child, $this).then(function () {
                             // renvoi de l'objet main

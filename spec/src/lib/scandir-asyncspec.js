@@ -31,11 +31,6 @@
         //
         Utils = require(Path.join(cwd, 'src', 'lib', 'utils')),
         Scandir = require(Path.join(cwd, 'src', 'lib', 'scandir-async'));
-    /*
-    exec = require(base).exec,
-    build = require(base).build,
-    files = require(base).files
-    */
 
     describe('scandir', function () {
 
@@ -87,7 +82,9 @@
                 var msg = 'Invalid path. Aborted';
                 helper = new Scandir();
                 helper.files('test_invalid_path').then(function () {}, function (err) {
-                    expect(err.message).toEqual(msg);
+                    expect(err.hasOwnProperty('path')).toBe(true);
+                    expect(err.hasOwnProperty('code')).toBe(true);
+                    expect(err.hasOwnProperty('errno')).toBe(true);
                     done();
                 });
             });
@@ -100,6 +97,8 @@
                     done();
                 }, function (err) {
                     // no error
+                    // console.log(err);
+                    // done();
                 });
             });
 
@@ -109,7 +108,11 @@
                 helper.files(no_file_path).then(function (result) {
                     expect(result.length).toEqual(4);
                     done();
-                }, function (err) {});
+                }, function (err) {
+                    // no error
+                    // console.log(err);
+                    // done();
+                });
 
             });
 
@@ -122,7 +125,11 @@
                 helper.browsable(base).then(function (stats) {
                     expect(stats.isDirectory()).toEqual(true);
                     done();
-                }, function () {});
+                }, function (err) {
+                    // no error
+                    // console.log(err);
+                    // done();
+                });
             });
             it('resolve w/ FS.error', function (done) {
                 var base = Path.join(cwd, 'spec', 'expected', 'non_exists');
@@ -165,6 +172,8 @@
                     done();
                 }, function (err) {
                     // no error
+                    // console.log(err);
+                    // done();
                 });
             });
         });
@@ -281,7 +290,6 @@
                 helper.exec(path).then(function (data) {
                     // no data
                 }, function (err) {
-                    // returns an Error
                     expect(err.message).toEqual('Invalid path. Aborted.');
                     done();
                 });
@@ -315,36 +323,43 @@
                     expect(helper.options().root).toEqual(path);
                     expect(helper.options().filters).toEqual(options.filters);
                     done();
-                }, function (err) {});
+                }, function (err) {
+                    // no error
+                    // console.log(err);
+                    // done();
+                });
                 helper.build.restore();
 
             });
 
-            it('returns a plainObject w/ basename as property', function (done) {
+            xit('returns a plainObject w/ basename as property', function (done) {
                 var name,
                     path = Path.join(cwd, 'spec', 'expected', 'explore_method');
                 name = Utils.dirname(path);
                 //
                 helper = new Scandir();
                 helper.exec(path).then(function (data) {
+                    console.log(data);
                     expect(lodash.isPlainObject(data)).toBe(true);
-                    // expect(data.name).toEqual(name);
+                    expect(data[name].name).toEqual(name);
                     done();
                 }, function (err) {
                     console.log(err);
-                    done();
+                    // done();
                 });
                 //
                 path = '.';
                 name = Utils.dirname(cwd);
                 helper.exec(path).then(function (data) {
                     expect(lodash.isPlainObject(data)).toBe(true);
-                    // expect(data.name).toEqual(name);
+                    expect(data[name].name).toEqual(name);
                     done();
                 }, function (err) {
                     // no error
+                    console.log('unexpected tests error: ');
+                    console.log('returns a plainObject w/ basename as property');
                     console.log(err);
-                    done();
+                    // done();
                 });
             });
         });
