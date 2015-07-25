@@ -1,4 +1,4 @@
-mkdir spec/expected/files_method/nofile
-mkdir spec/expected/explore_method/subnofiles
-mkdir spec/expected/files_method/threefile/subfolder
-exit 1
+sudo mkdir spec/expected/files_method/nofile
+sudo mkdir spec/expected/explore_method/subnofiles
+sudo mkdir spec/expected/files_method/threefile/subfolder
+exit 0
