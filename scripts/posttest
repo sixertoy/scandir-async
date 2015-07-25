@@ -1,4 +1,4 @@
-sudo rm -rf spec/expected/files_method/nofile
-sudo rm -rf spec/expected/explore_method/subnofiles
-sudo rm -rf spec/expected/files_method/threefile/subfolder
+rm -rf spec/expected/files_method/nofile
+rm -rf spec/expected/explore_method/subnofiles
+rm -rf spec/expected/files_method/threefile/subfolder
 exit 0
