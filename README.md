@@ -1,6 +1,6 @@
 # scandir-async [![Built with Grunt][grunt-img]](http://gruntjs.com/)
 
-[![MIT License][license-img]][license-url] [![NPM version][npm-version-img]][npm-url] [![NPM downloads][npm-downloads-img]][npm-url] [![Build][travis-img]][travis-url]
+[![MIT License][license-img]][license-url] [![NPM version][npm-version-img]][npm-url] [![NPM downloads][npm-downloads-img]][npm-url] [![Build][travis-img]][travis-url] [![Coverage][coverall-img]][coverall-url]
 
 * Iterates trough a directory and returns a js object tree
 
