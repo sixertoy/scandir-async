@@ -339,7 +339,6 @@
                 //
                 helper = new Scandir();
                 helper.exec(path).then(function (data) {
-                    console.log(data);
                     expect(lodash.isPlainObject(data)).toBe(true);
                     expect(data[name].name).toEqual(name);
                     done();
