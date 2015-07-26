@@ -332,7 +332,7 @@
 
             });
 
-            xit('returns a plainObject w/ basename as property', function (done) {
+            it('returns a plainObject w/ basename as property', function (done) {
                 var name,
                     path = Path.join(cwd, 'spec', 'expected', 'explore_method');
                 name = Utils.dirname(path);
@@ -344,21 +344,23 @@
                     expect(data[name].name).toEqual(name);
                     done();
                 }, function (err) {
-                    console.log(err);
+                    // console.log(err);
                     // done();
                 });
-                //
-                path = '.';
-                name = Utils.dirname(cwd);
+            });
+
+            it('returns a plainObject w/ basename as property dot base', function (done) {
+                var path = '.',
+                    name = Utils.dirname(cwd);
                 helper.exec(path).then(function (data) {
                     expect(lodash.isPlainObject(data)).toBe(true);
                     expect(data[name].name).toEqual(name);
                     done();
                 }, function (err) {
                     // no error
-                    console.log('unexpected tests error: ');
-                    console.log('returns a plainObject w/ basename as property');
-                    console.log(err);
+                    // console.log('unexpected tests error: ');
+                    // console.log('returns a plainObject w/ basename as property');
+                    // console.log(err);
                     // done();
                 });
             });
