@@ -47,14 +47,19 @@
         describe('scandir.node()', function () {
             it('returns an object', function () {
                 var base = cwd,
-                    stats = {};
+                    stats = {
+                        isDirectory: function () {
+                            return false;
+                        }
+                    };
                 helper = new Scandir();
                 result = helper.node(base, stats);
                 expect(result).toEqual({
                     files: [],
-                    stats: {},
+                    stats: stats,
                     fullpath: cwd,
-                    name: Utils.dirname(cwd)
+                    name: Utils.dirname(cwd),
+                    isdir: stats.isDirectory()
                 });
             });
         });
@@ -149,6 +154,7 @@
                 var file = Path.join(cwd, 'spec', 'expected', 'explore_method'),
                     base = {
                         files: [],
+                        isdir: true,
                         fullpath: file,
                         name: 'explore_method',
                         stats: FS.statSync(file)
@@ -159,6 +165,7 @@
                     expect(data.files.length).toEqual(4);
                     expect(data.files[0].files).toEqual(false); // index.html
                     expect(data.files[1].files).toEqual(false); // subnofiles
+                    expect(data.files[2].isdir).toEqual(true); // subone
                     expect(data.files[2].files.length).toEqual(1); // subone
                     expect(data.files[2].files[0].files.length).toEqual(2); // subone/file && subone/file.txt
                     expect(data.files[2].files[0].files[0].name).toEqual('file'); // subone/file && subone/file.txt
@@ -169,11 +176,11 @@
                     expect(data.files[3].files[2].files.length).toEqual(1); // subtwo/subsub
                     expect(data.files[3].files[2].files[0].files.length).toEqual(1); // subtwo/subsub/subsubsub
                     expect(data.files[3].files[2].files[0].files[0].name).toEqual('file.css'); // subtwo/subsub/subsubsub/file.css
+                    expect(data.files[3].files[2].files[0].files[0].files).toEqual(false); // subtwo/subsub/subsubsub/file.css
+                    expect(data.files[3].files[2].files[0].files[0].isdir).toEqual(false); // subtwo/subsub/subsubsub/file.css
                     done();
                 }, function (err) {
                     // no error
-                    // console.log(err);
-                    // done();
                 });
             });
         });

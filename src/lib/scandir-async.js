@@ -48,9 +48,10 @@
              *
              */
             this.map = function (entries, callback) {
-                var $this = this;
+                var q,
+                    $this = this;
                 try {
-                    var q = new Q();
+                    q = new Q();
                     return q.then(function () {
                         // inside a `then`, exceptions will be handled in next onRejected
                         return entries.map(function (node) {
@@ -69,7 +70,7 @@
              */
             this.files = function (base) {
                 var deferred = Q.defer();
-                    // relative = Path.relative(process.cwd(), base);
+                // relative = Path.relative(process.cwd(), base);
 
                 FS.readdir(base, function (err, files) {
                     if (err) {
@@ -97,7 +98,7 @@
              */
             this.browsable = function (base) {
                 var deferred = Q.defer();
-                    // relative = Path.relative(process.cwd(), base);
+                // relative = Path.relative(process.cwd(), base);
 
                 FS.stat(base, function (err, stats) {
                     if (err) {
@@ -129,11 +130,13 @@
                     if (stats.isFile()) {
                         // console.log('file.name => ' + node.name);
                         node.files = false;
+                        node.isdir = false;
                         deferred.resolve(node);
 
                     } else if (stats.isDirectory()) {
                         // console.log('dir.name => ' + node.name);
                         node.files = [];
+                        node.isdir = true;
                         $this.files(base).then(function (files) {
                             if (!files) {
                                 grunt.log.debug('contient pas de fichiers');
@@ -184,14 +187,13 @@
              *
              */
             this.node = function (base, stats) {
-                // construction de l'objet
-                var data = {
+                return {
                     files: [],
                     stats: stats,
+                    isdir: false,
                     fullpath: base,
                     name: Utils.dirname(base)
                 };
-                return data;
             };
 
             /**
