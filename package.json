@@ -1,6 +1,6 @@
 {
   "name": "scandir-async",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Asynchronous directory/files iterator",
   "main": "index.js",
   "scripts": {
