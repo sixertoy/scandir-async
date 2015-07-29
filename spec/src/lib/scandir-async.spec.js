@@ -38,18 +38,14 @@
         describe('scandir.node()', function () {
             it('returns an object', function () {
                 var base = cwd,
-                    stats = {
-                        isDirectory: function () {
-                            return false;
-                        }
-                    };
+                    stats = {};
                 result = scandir.node(base, stats);
                 expect(result).toEqual({
                     files: [],
-                    stats: stats,
+                    stats: {},
+                    isdir: false,
                     fullpath: cwd,
-                    name: Utils.dirname(cwd),
-                    isdir: stats.isDirectory()
+                    name: Utils.dirname(cwd)
                 });
             });
         });
@@ -206,7 +202,7 @@
                     done();
                 });
             });
-            
+
             /*
             it('does not reject', function (done) {
                 var path = Path.join(cwd, 'spec', 'expected', 'explore_method');
@@ -245,17 +241,18 @@
                     done();
                 }, function (err) {});
             });
-            
+
             it('returns a plainObject w/ basename as property dot base', function (done) {
                 var path = '.',
-                    name = Utils.dirname(cwd);
+                    name = Utils.dirname(cwd); //scandir
                 scandir.exec(path).then(function (data) {
                     expect(lodash.isPlainObject(data)).toBe(true);
                     expect(data[name].name).toEqual(name);
+                    expect(data[name].name).toEqual('scandir-async');
                     done();
                 }, function (err) {});
             });
-            
+
         });
 
     });

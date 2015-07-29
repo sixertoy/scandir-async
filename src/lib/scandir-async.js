@@ -14,7 +14,7 @@
         Q = require('q'),
         FS = require('fs'),
         Path = require('path'),
-        Util = require('util'),
+        util = require('util'),
         chalk = require('chalk'),
         grunt = require('grunt'),
         lodash = require('lodash'),
@@ -109,14 +109,15 @@
              *
              */
             build: function (node) {
-                var p, childs, msg,
+                var p, childs, msg, sstats,
                     deferred = Q.defer(),
                     base = node.fullpath;
                 //
                 // retourne les stats pour un fichier
                 scandir.browsable(base).then(function (stats) {
                     // ajout des stats au node
-                    node.stats = stats;
+                    // en supprimant les fonctions de l'objet stats
+                    node.stats = Utils.stats(stats);
                     // si c'est un fichier
                     if (stats.isFile()) {
                         node.files = false;
@@ -225,7 +226,7 @@
                                 // renvoi de l'objet main
                                 result[child.name] = child;
                                 deferred.resolve(result);
-                                
+
                             }, function (err) {
                                 deferred.reject(err);
                             });
