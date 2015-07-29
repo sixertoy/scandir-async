@@ -13,9 +13,15 @@ npm install scandir-async
 ## Usage
 
 ```javascript
-var Scandir = require('scandir-async),
-    instance = new Scandir();
-instance.exec([folder], [options]).then(function(data){
+var scandir = require('scandir-async),
+    exec = require('scandir-async).exec;
+scandir.exec([folder], [options]).then(function(data){
+    // Q.promise resolved
+}, function(err){
+    // Q.promise rejected
+});
+// or exposed
+exec([folder], [options]).then(function(data){
     // Q.promise resolved
 }, function(err){
     // Q.promise rejected
@@ -56,6 +62,7 @@ instance.exec([folder], [options]).then(function(data){
 #### Options Object
 
 **Not implemented yet**
+
 ```javascript
 {
     depth: 0,
@@ -68,14 +75,13 @@ instance.exec([folder], [options]).then(function(data){
 ### Tests
 
 Git add/clone does not take care of empty folder used for tests, it must be created manually
+Or launch test using **npm test**
 
 ```bash
 mkdir spec/expected/explore_method/subnofiles
 mkdir spec/expected/files_method/nofile
 mkdir spec/expected/files_method/threefile/subfolder
 ```
-
-A .gitkeep file can be used in empty folder, but scandir does not use filters yet
 
 ## History
 

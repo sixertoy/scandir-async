@@ -30,7 +30,8 @@
         lodash = require('lodash'),
         //
         Utils = require(Path.join(cwd, 'src', 'lib', 'utils')),
-        scandir = require(Path.join(cwd, 'src', 'lib', 'scandir-async'));
+        scandir = require(Path.join(cwd, 'src', 'lib', 'scandir-async')),
+        exec = require(Path.join(cwd, 'src', 'lib', 'scandir-async')).exec;
 
     describe('scandir', function () {
 
@@ -184,23 +185,23 @@
 
             it('Q.reject', function (done) {
                 var msg = 'Invalid arguments. Aborted.';
-                scandir.exec().then(function (data) {}, function (err) {
+                exec().then(function (data) {}, function (err) {
                     expect(err.message).toEqual(msg);
                     done();
                 });
-                scandir.exec([]).then(function (data) {}, function (err) {
+                exec([]).then(function (data) {}, function (err) {
                     expect(err.message).toEqual(msg);
                     done();
                 });
-                scandir.exec(123).then(function (data) {}, function (err) {
+                exec(123).then(function (data) {}, function (err) {
                     expect(err.message).toEqual(msg);
                     done();
                 });
-                scandir.exec(null).then(function (data) {}, function (err) {
+                exec(null).then(function (data) {}, function (err) {
                     expect(err.message).toEqual(msg);
                     done();
                 });
-                scandir.exec(undefined).then(function (data) {}, function (err) {
+                exec(undefined).then(function (data) {}, function (err) {
                     expect(err.message).toEqual(msg);
                     done();
                 });

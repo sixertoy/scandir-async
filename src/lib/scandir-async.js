@@ -237,4 +237,5 @@
             }
         };
     module.exports = scandir;
+    exports.exec = scandir.exec;
 }());
