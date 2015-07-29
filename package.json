@@ -6,7 +6,7 @@
   "scripts": {
     "clean_modules": "rm -rf node_modules",
     "pretest": "sh ./scripts/pretest",
-    "test": "istanbul cover ./scripts/jasmine_node --captureExceptions spec/src",
+    "test": "istanbul cover ./scripts/jasmine_node -x **/*.spec.js --captureExceptions spec/src",
     "posttest": "sh ./scripts/posttest",
     "start": "echo \"Error: no start specified\" && exit 1"
   },
