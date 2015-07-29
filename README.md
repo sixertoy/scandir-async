@@ -30,15 +30,17 @@ exec([folder], [options]).then(function(data){
 
 ## Tree Object
 
-```json
+```javascript
 {
     "dirname":{
         files: [{
+                isdir: false,
                 files: false,
                 name: dirname,
                 stats: [NodeJS fs stats],
                 fullpath: /abs/path/to/dirname
             }, {
+                isdir: true,
                 files: [...],
                 name: dirname,
                 stats: [NodeJS fs stats],
@@ -46,6 +48,7 @@ exec([folder], [options]).then(function(data){
             },
             {...}
         ],
+        isdir: true,
         name: dirname,
         stats: [NodeJS fs stats],
         fullpath: /abs/path/to/dirname
