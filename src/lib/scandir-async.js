@@ -5,7 +5,10 @@
     'use strict';
 
     var dotbase = '.',
-        base_excluded = ['.gitkeep'],
+        defaults = {
+            depth: 0,
+            filters: []
+        },
         //
         // requires
         Q = require('q'),
@@ -16,70 +19,61 @@
         grunt = require('grunt'),
         lodash = require('lodash'),
         Utils = require('./utils'),
+
         //
-        // Object ScandirAsync
-        ScandirAsync = function () {
-
-            /**
-             *
-             * defaults
-             *
-             */
-            this.root = dotbase;
-            this.defaults = {
-                depth: 0,
-                filters: []
-            };
+        // Object scandir
+        scandir = {
 
             /**
              *
              *
              *
              */
-            this.options = function () {
-                return lodash.assign({
-                    root: this.root
-                }, this.defaults);
-            };
+            node: function (base, stats) {
+                return {
+                    files: [],
+                    stats: stats,
+                    isdir: false,
+                    fullpath: base,
+                    name: Utils.dirname(base)
+                };
+            },
 
             /**
              *
              * @see https://strongloop.com/strongblog/how-to-compose-node-js-promises-with-q/
              *
              */
-            this.map = function (entries, callback) {
-                var q,
-                    $this = this;
+            map: function (entries, callback) {
+                var q;
                 try {
                     q = new Q();
                     return q.then(function () {
                         // inside a `then`, exceptions will be handled in next onRejected
                         return entries.map(function (node) {
-                            return callback.apply($this, [node]);
+                            return callback.apply(scandir, [node]);
                         });
                     }).all(); // return group promise
                 } catch (e) {
                     throw new Error(e);
                 }
-            };
+            },
 
             /**
              *
              * Verifie qu'un dossier contient des fichiers
              *
              */
-            this.files = function (base) {
+            files: function (base) {
                 var deferred = Q.defer();
-                // relative = Path.relative(process.cwd(), base);
-
                 FS.readdir(base, function (err, files) {
                     if (err) {
-                        grunt.log.debug('ScandirAsync.files() :: ' + base);
+                        grunt.log.debug('scandir.files() :: ' + base);
                         deferred.reject(err);
 
                     } else {
                         files = files.filter(function (file) {
-                            return (base_excluded.indexOf(file) === -1);
+                            return true;
                         });
                         if (files.length) {
                             deferred.resolve(files);
@@ -89,55 +83,50 @@
                     }
                 });
                 return deferred.promise;
-            };
+            },
 
             /**
              *
              *
              *
              */
-            this.browsable = function (base) {
+            browsable: function (base) {
                 var deferred = Q.defer();
-                // relative = Path.relative(process.cwd(), base);
-
                 FS.stat(base, function (err, stats) {
                     if (err) {
-                        grunt.log.debug('ScandirAsync.browsable() :: ' + base);
+                        grunt.log.debug('scandir.browsable() :: ' + base);
                         deferred.reject(err);
                     } else {
                         deferred.resolve(stats);
                     }
                 });
                 return deferred.promise;
-            };
+            },
 
             /**
              *
              *
              *
              */
-            this.build = function (node) {
+            build: function (node) {
                 var p, childs, msg,
-                    $this = this,
                     deferred = Q.defer(),
                     base = node.fullpath;
                 //
                 // retourne les stats pour un fichier
-                $this.browsable(base).then(function (stats) {
+                scandir.browsable(base).then(function (stats) {
                     // ajout des stats au node
                     node.stats = stats;
                     // si c'est un fichier
                     if (stats.isFile()) {
-                        // console.log('file.name => ' + node.name);
                         node.files = false;
                         node.isdir = false;
                         deferred.resolve(node);
 
                     } else if (stats.isDirectory()) {
-                        // console.log('dir.name => ' + node.name);
                         node.files = [];
                         node.isdir = true;
-                        $this.files(base).then(function (files) {
+                        scandir.files(base).then(function (files) {
                             if (!files) {
                                 grunt.log.debug('contient pas de fichiers');
                                 node.files = false;
@@ -146,15 +135,15 @@
                             } else {
                                 node.files = files.map(function (file) {
                                     p = Path.join(base, file);
-                                    return $this.node(p, false);
+                                    return scandir.node(p, false);
                                 });
-                                $this.map(node.files, $this.build).then(function (res) {
+                                scandir.map(node.files, scandir.build).then(function (res) {
                                     deferred.resolve(node);
 
                                 }, function (err) {
                                     // erreur du chargement de fichier
                                     // console.log(chalk.red.bold(msg));
-                                    grunt.log.debug('ScandirAsync.build() recursive error');
+                                    grunt.log.debug('scandir.build() recursive error');
                                     deferred.reject(err);
                                 });
 
@@ -162,111 +151,90 @@
 
                         }, function (err) {
                             // erreur du chargement de fichier
-                            grunt.log.debug('ScandirAsync.build() files error');
+                            grunt.log.debug('scandir.build() files error');
                             deferred.reject(err);
                         });
 
                     } else {
-                        msg = 'ScandirAsync.build() not a directory and not a file: ' + base;
+                        msg = 'scandir.build() not a directory and not a file: ' + base;
                         grunt.log.debug(msg);
                         throw new Error(msg);
                     }
 
                 }, function (err) {
-                    // erreur du chargement de fichier
-                    // msg = 'ScandirAsync.build() browsable error';
-                    // console.log(chalk.red.bold(msg));
                     deferred.reject(err);
                 });
                 return deferred.promise;
-            };
+            },
 
             /**
              *
-             *
-             *
-             */
-            this.node = function (base, stats) {
-                return {
-                    files: [],
-                    stats: stats,
-                    isdir: false,
-                    fullpath: base,
-                    name: Utils.dirname(base)
-                };
-            };
-
-            /**
-             *
-             * ScandirAsync Entry Point
+             * scandir Entry Point
              *
              */
-            this.exec = function (pBase, pOptions) {
-                var child, msg,
-                    main = {},
-                    $this = this,
+            exec: function (base, options) {
+                var child, msg, root,
+                    result = {},
                     deferred = Q.defer();
-                //
+
                 // si l'argument base n'est pas une string
                 // ou n'est pas un objet
-                if (!lodash.isString(pBase) && !lodash.isPlainObject(pBase)) {
+                if (arguments.length < 1 || (!lodash.isString(base) && !lodash.isPlainObject(base))) {
                     msg = 'Invalid arguments. Aborted.';
                     deferred.reject(new Error(msg));
-                }
-                //
-                // si l'argument base
-                // est un objet
-                if (lodash.isPlainObject(pBase)) {
-                    // on transforme options en objet
-                    // sur une de valeurs par defaut
-                    pOptions = lodash.assign({}, pBase);
-                    pBase = this.root;
-                }
-                //
-                // defaults parameters
-                if (lodash.isEmpty(pBase)) {
-                    pBase = this.root;
-                }
-                if (!lodash.isPlainObject(pOptions)) {
-                    pOptions = {};
-                }
 
-                // si base n'est pas un chemin absolut
-                if (!Path.isAbsolute(pBase)) {
-                    pBase = Path.join(process.cwd(), pBase);
-                }
+                } else {
+                    //
+                    // si l'argument base
+                    // est un objet
+                    if (lodash.isPlainObject(base)) {
+                        // on transforme options en objet
+                        // sur une de valeurs par defaut
+                        options = lodash.assign({}, base);
+                        base = dotbase;
+                    }
+                    //
+                    // defaults parameters
+                    if (lodash.isEmpty(base)) {
+                        base = dotbase;
+                    }
+                    if (!lodash.isPlainObject(options)) {
+                        options = {};
+                    }
 
-                this.root = Path.normalize(pBase);
-                this.defaults = lodash.assign(this.defaults, pOptions);
+                    // si base n'est pas un chemin absolut
+                    if (!Path.isAbsolute(base)) {
+                        base = Path.join(process.cwd(), base);
+                    }
 
-                FS.stat(this.root, function (err, stats) {
-                    if (err) {
-                        deferred.reject(err);
-                    } else if (lodash.isEmpty(stats) || !stats.isDirectory()) {
-                        msg = 'Invalid path. Aborted.';
-                        deferred.reject(new Error(msg));
-                    } else {
-                        // lancement de la recursivite
-                        child = $this.node($this.root, stats);
-                        // console.log(child);
-                        //
-                        $this.build(child).then(function () {
-                            // renvoi de l'objet main
-                            main[child.name] = child;
-                            deferred.resolve(main);
+                    root = Path.normalize(base);
+                    options = lodash.assign(defaults, options);
 
-                        }, function (err) {
+                    FS.stat(root, function (err, stats) {
+                        if (err) {
                             deferred.reject(err);
 
-                        });
+                        } else if (lodash.isEmpty(stats) || !stats.isDirectory()) {
+                            msg = 'Invalid path. Aborted.';
+                            deferred.reject(new Error(msg));
 
-                    }
-                });
+                        } else {
+                            // lancement de la recursive
+                            child = scandir.node(root, stats);
+                            scandir.build(child).then(function () {
+                                // renvoi de l'objet main
+                                result[child.name] = child;
+                                deferred.resolve(result);
+                                
+                            }, function (err) {
+                                deferred.reject(err);
+                            });
+
+                        }
+                    });
+                }
                 return deferred.promise;
-            };
-
+            }
         };
-
-    module.exports = ScandirAsync;
-
+    module.exports = scandir;
 }());
