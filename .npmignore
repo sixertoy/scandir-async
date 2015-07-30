@@ -1,0 +1,13 @@
+coverage/
+grunt/
+node_modules/
+scripts/
+.csslintrc
+.editorconfig
+.gitattributes
+.gitignore
+.jshintrc
+.npmignore
+.travis.yml
+.yo-rc.json
+.Grunfile.js
