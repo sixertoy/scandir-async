@@ -13,8 +13,8 @@ npm install scandir-async
 ## Usage
 
 ```javascript
-var scandir = require('scandir-async),
-    exec = require('scandir-async).exec;
+var scandir = require('scandir-async'),
+    exec = require('scandir-async').exec;
 scandir.exec([folder], [options]).then(function(data){
     // Q.promise resolved
 }, function(err){
