@@ -80,7 +80,7 @@
             it('Q.resolved with false (no file in folder)', function (done) {
                 var no_file_path = Path.join(cwd, 'spec', 'expected', 'files_method', 'nofile');
                 scandir.files(no_file_path).then(function (result) {
-                    expect(result).toEqual(false);
+                    expect(result).toEqual([]);
                     done();
                 }, function (err) {});
             });
@@ -129,12 +129,16 @@
                     expect(lodash.isPlainObject(data)).toEqual(true);
                     expect(data.files.length).toEqual(4);
                     expect(data.files[0].files).toEqual(false); // index.html
-                    expect(data.files[1].files).toEqual(false); // subnofiles
+
+                    expect(data.files[1].isdir).toEqual(true); // subnofiles
+                    expect(data.files[1].files).toEqual([]); // subnofiles
+
                     expect(data.files[2].isdir).toEqual(true); // subone
                     expect(data.files[2].files.length).toEqual(1); // subone
                     expect(data.files[2].files[0].files.length).toEqual(2); // subone/file && subone/file.txt
                     expect(data.files[2].files[0].files[0].name).toEqual('file'); // subone/file && subone/file.txt
                     expect(data.files[2].files[0].files[1].name).toEqual('file.txt'); // subone/file && subone/file.txt
+
                     expect(data.files[3].files.length).toEqual(3); // subtwo
                     expect(data.files[3].files[0].name).toEqual('file.js'); // subtwo/file.js
                     expect(data.files[3].files[1].name).toEqual('file.md'); // subtwo/file.md

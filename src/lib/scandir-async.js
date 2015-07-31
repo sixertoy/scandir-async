@@ -75,11 +75,7 @@
                         files = files.filter(function (file) {
                             return true;
                         });
-                        if (files.length) {
-                            deferred.resolve(files);
-                        } else {
-                            deferred.resolve(false);
-                        }
+                        deferred.resolve(files);
                     }
                 });
                 return deferred.promise;
@@ -175,7 +171,6 @@
              */
             exec: function (base, options) {
                 var child, msg, root,
-                    result = {},
                     deferred = Q.defer();
 
                 // si l'argument base n'est pas une string
