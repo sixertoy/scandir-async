@@ -203,41 +203,13 @@
                 });
             });
 
-            /*
-            it('does not reject', function (done) {
-                var path = Path.join(cwd, 'spec', 'expected', 'explore_method');
-                sinon.stub(scandir, 'build', function () {
-                    var deferred = Q.defer();
-                    setTimeout(function () {
-                        deferred.resolve('ok');
-                    }, 1000);
-                    return deferred.promise;
-                });
-                scandir.exec(path).then(function (data) {
-                    expect(scandir.options().root).toEqual(path);
-                    done();
-                }, function (err) {});
-                scandir.exec(options).then(function (data) {
-                    expect(scandir.options().filters).toEqual(options.filters);
-                    done();
-                }, function (err) {});
-
-                scandir.exec(path, options).then(function (data) {
-                    expect(scandir.options().root).toEqual(path);
-                    expect(scandir.options().filters).toEqual(options.filters);
-                    done();
-                }, function (err) {});
-                scandir.build.restore();
-            });
-            */
-
             it('returns a plainObject w/ basename as property', function (done) {
                 var name,
                     path = Path.join(cwd, 'spec', 'expected', 'explore_method');
                 name = Utils.dirname(path);
                 scandir.exec(path).then(function (data) {
                     expect(lodash.isPlainObject(data)).toBe(true);
-                    expect(data[name].name).toEqual(name);
+                    expect(data.name).toEqual(name);
                     done();
                 }, function (err) {});
             });
@@ -247,8 +219,8 @@
                     name = Utils.dirname(cwd); //scandir
                 scandir.exec(path).then(function (data) {
                     expect(lodash.isPlainObject(data)).toBe(true);
-                    expect(data[name].name).toEqual(name);
-                    expect(data[name].name).toEqual('scandir-async');
+                    expect(data.name).toEqual(name);
+                    expect(data.name).toEqual('scandir-async');
                     done();
                 }, function (err) {});
             });

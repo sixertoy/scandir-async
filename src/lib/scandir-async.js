@@ -224,8 +224,7 @@
                             child = scandir.node(root, stats);
                             scandir.build(child).then(function () {
                                 // renvoi de l'objet main
-                                result[child.name] = child;
-                                deferred.resolve(result);
+                                deferred.resolve(child);
 
                             }, function (err) {
                                 deferred.reject(err);

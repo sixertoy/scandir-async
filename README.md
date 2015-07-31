@@ -32,27 +32,40 @@ exec([folder], [options]).then(function(data){
 
 ```javascript
 {
-    "dirname":{
-        files: [{
-                isdir: false,
-                files: false,
-                name: dirname,
-                stats: [NodeJS fs stats],
-                fullpath: /abs/path/to/dirname
-            }, {
-                isdir: true,
-                files: [...],
-                name: dirname,
-                stats: [NodeJS fs stats],
-                fullpath: /abs/path/to/dirname
-            },
-            {...}
-        ],
-        isdir: true,
-        name: dirname,
-        stats: [NodeJS fs stats],
-        fullpath: /abs/path/to/dirname
-    }
+    isdir: true,
+    name: dirname,
+    fullpath: /abs/path/to/dirname,
+    stats: {
+        dev: 310691535,
+         ino: 2814749767439347,
+         uid: 0,
+         gid: 0,
+         rdev: 0,
+         size: 0,
+         mode: 16822,
+         nlink: 1,
+         blocks: false,
+         blksize: false,
+         atime: 1436683130000,
+         mtime: 1436683130000,
+         ctime: 1436683130000,
+         birthtime: 1436683129000
+    },
+    files: [{
+            isdir: false,
+            files: false,
+            name: dirname,
+            stats: [object],
+            fullpath: /abs/path/to/dirname
+        }, {
+            isdir: true,
+            files: [...],
+            name: dirname,
+            stats: [object],
+            fullpath: /abs/path/to/dirname
+        },
+        {...}
+    ]
 }
 ```
 
@@ -87,6 +100,8 @@ mkdir spec/expected/files_method/threefile/subfolder
 ```
 
 ## History
+
+- v0.1.10: Changes on tree object
 
 [grunt-img]: https://cdn.gruntjs.com/builtwith.png
 [license-img]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square

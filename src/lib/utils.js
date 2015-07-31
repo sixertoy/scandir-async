@@ -6,15 +6,6 @@
 
     var Path = require('path'),
         utils = {
-            /*
-            remove: function (arr, find) {
-                var index = arr.indexOf(find);
-                if (index > -1) {
-                    arr.splice(index, 1);
-                }
-                return arr;
-            },
-            */
             dirname: function (base, sep) {
                 if (arguments.length < 2) {
                     base = Path.normalize(base);
@@ -36,8 +27,8 @@
                     size: stats.size,
                     mode: stats.mode,
                     nlink: stats.nlink,
-                    blocks: stats.blocks,
-                    blksize: stats.blksize,
+                    blocks: stats.blocks || false,
+                    blksize: stats.blksize || false,
                     atime: Date.parse(stats.atime),
                     mtime: Date.parse(stats.mtime),
                     ctime: Date.parse(stats.ctime),
