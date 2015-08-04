@@ -152,6 +152,67 @@
             });
         });
 
+        describe('scandir.arrange', function () {
+            it('not arrange default  sorted:false/undefined', function () {
+                var data = [
+                        {name: 'autrefichier.js', isdir: false},
+                        {name: 'dossier', isdir: true},
+                        {name: 'fichier.js', isdir: false}
+                    ],
+                    res = data.concat([]);
+                scandir.arrange(res);
+                expect(data).toEqual(res);
+                res = data.concat([]);
+                scandir.arrange(res, false);
+                expect(data).toEqual(res);
+            });
+            it('arrange directories first sorted:true', function () {
+                var data = [
+                        {name: 'autrefichier.js', isdir: false},
+                        {name: 'dossier', isdir: true},
+                        {name: 'fichier.js', isdir: false}
+                    ],
+                    res = data.concat([]);
+                scandir.arrange(res, true);
+                data = [
+                    {name: 'dossier', isdir: true},
+                    {name: 'autrefichier.js', isdir: false},
+                    {name: 'fichier.js', isdir: false}
+                ];
+                expect(data).toEqual(res);
+            });
+            it('arrange directories first sorted:ASC', function () {
+                var data = [
+                        {name: 'autrefichier.js', isdir: false},
+                        {name: 'dossier', isdir: true},
+                        {name: 'fichier.js', isdir: false}
+                    ],
+                    res = data.concat([]);
+                scandir.arrange(res, 'ASC');
+                data = [
+                    {name: 'dossier', isdir: true},
+                    {name: 'autrefichier.js', isdir: false},
+                    {name: 'fichier.js', isdir: false}
+                ];
+                expect(data).toEqual(res);
+            });
+            it('arrange files first sorted:DESC', function () {
+                var data = [
+                        {name: 'autrefichier.js', isdir: false},
+                        {name: 'dossier', isdir: true},
+                        {name: 'fichier.js', isdir: false}
+                    ],
+                    res = data.concat([]);
+                scandir.arrange(res, 'DESC');
+                data = [
+                    {name: 'autrefichier.js', isdir: false},
+                    {name: 'fichier.js', isdir: false},
+                    {name: 'dossier', isdir: true}
+                ];
+                expect(data).toEqual(res);
+            });
+        });
+
         describe('scandir/exec/scandir.exec', function () {
 
             it('returns Q.promise', function () {

@@ -54,12 +54,14 @@
              *
              */
             arrange: function (files, order) {
-                order = lodash.isString(order) ? order.toUpperCase() : 'ASC';
-                if (order === 'ASC' || order === 'DESC') {
-                    if (order === 'ASC') {
-                        files.sort(sortDirectoryFirst);
-                    } else {
-                        files.sort(sortFilesFirst);
+                if (arguments.length > 1 && order !== false) {
+                    order = lodash.isString(order) ? order.toUpperCase() : 'ASC';
+                    if (order === 'ASC' || order === 'DESC') {
+                        if (order === 'ASC') {
+                            files.sort(sortDirectoryFirst);
+                        } else {
+                            files.sort(sortFilesFirst);
+                        }
                     }
                 }
             },
@@ -162,7 +164,7 @@
                                     return scandir.node(p, false);
                                 });
                                 scandir.map(node.files, options, scandir.build).then(function (res) {
-                                    if(options.sorted){
+                                    if (options.sorted) {
                                         scandir.arrange(node.files, options.sorted);
                                     }
                                     deferred.resolve(node);
