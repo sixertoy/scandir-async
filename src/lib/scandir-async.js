@@ -4,12 +4,28 @@
 
     'use strict';
 
+    function sortByName(a, b) {
+        if (a.name < b.name)
+            return -1;
+        if (a.name > b.name)
+            return 1;
+        return 0;
+    }
+
     function sortDirectoryFirst(a, b) {
-        return b.isdir - a.isdir;
+        if (!a.isdir && !b.isdir) {
+            return sortByName(a, b);
+        } else {
+            return b.isdir - a.isdir;
+        }
     }
 
     function sortFilesFirst(a, b) {
-        return a.isdir - b.isdir;
+        if (!a.isdir && !b.isdir) {
+            return sortByName(a, b);
+        } else {
+            return a.isdir - b.isdir;
+        }
     }
 
     var dotbase = '.',
@@ -250,10 +266,6 @@
                             // lancement de la recursive
                             child = scandir.node(root, stats);
                             scandir.build(child, options).then(function () {
-                                // renvoi de l'objet main
-                                if (options.sorted) {
-                                    scandir.arrange(child.files, options.sorted);
-                                }
                                 deferred.resolve(child);
 
                             }, function (err) {
