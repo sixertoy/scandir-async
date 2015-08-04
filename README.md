@@ -113,6 +113,7 @@ mkdir spec/expected/files_method/threefile/subfolder
 
 ## History
 
+- v0.1.12: Sorted options added
 - v0.1.11: Files prop for directory is an array
 - v0.1.10: Changes on tree object
 
