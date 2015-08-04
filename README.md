@@ -82,7 +82,7 @@ exec([folder], [options]).then(function(data){
 
 ```javascript
 {
-    sorted: true, // Default not sorted
+    sorted: false, // Default not sorted
     sorted: true, // 'ASC'
     sorted: 'ASC',
     sorted: 'DESC',
