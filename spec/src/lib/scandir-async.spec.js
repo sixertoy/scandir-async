@@ -228,6 +228,84 @@
                     done();
                 }, function (err) {});
             });
+        });
+
+        describe('scandir sorted', function () {
+
+            it('not sorted', function (done) {
+                var map,
+                    res = ['anotherfolder', 'autrefichier.js', 'file.js', 'simplefolder'],
+                    path = Path.join(cwd, 'spec', 'expected', 'sorted'); //scandir
+                scandir.exec(path, {
+                    sorted: false
+                }).then(function (data) {
+                    map = data.files.map(function (item) {
+                        return item.name;
+                    });
+                    expect(map).toEqual(res);
+                    done();
+                }, function (err) {});
+            });
+
+            it('sorted folder first', function (done) {
+                var map,
+                    res = ['anotherfolder', 'simplefolder', 'autrefichier.js', 'file.js'],
+                    path = Path.join(cwd, 'spec', 'expected', 'sorted'); //scandir
+                scandir.exec(path, {
+                    sorted: true
+                }).then(function (data) {
+                    map = data.files.map(function (item) {
+                        return item.name;
+                    });
+                    expect(map).toEqual(res);
+                    done();
+                }, function (err) {});
+            });
+
+            it('sorted folder "ASC"', function (done) {
+                var map,
+                    res = ['anotherfolder', 'simplefolder', 'autrefichier.js', 'file.js'],
+                    path = Path.join(cwd, 'spec', 'expected', 'sorted'); //scandir
+                scandir.exec(path, {
+                    sorted: 'ASC'
+                }).then(function (data) {
+                    map = data.files.map(function (item) {
+                        return item.name;
+                    });
+                    expect(map).toEqual(res);
+                    done();
+                }, function (err) {});
+            });
+
+            it('sorted folder "DESC"', function (done) {
+                var map,
+                    res = ['autrefichier.js', 'file.js', 'anotherfolder', 'simplefolder'],
+                    path = Path.join(cwd, 'spec', 'expected', 'sorted'); //scandir
+                scandir.exec(path, {
+                    sorted: 'DESC'
+                }).then(function (data) {
+                    map = data.files.map(function (item) {
+                        return item.name;
+                    });
+                    expect(map).toEqual(res);
+                    done();
+                }, function (err) {});
+            });
+
+            it('subdir sorted list', function (done) {
+                var map,
+                    res = ['dossier', 'autrefichier.js', 'fichier.js'],
+                    path = Path.join(cwd, 'spec', 'expected', 'sorted'); //scandir
+                scandir.exec(path, {
+                    sorted: true
+                }).then(function (data) {
+                    map = data.files[0].files.map(function (item) {
+                        return item.name;
+                    });
+                    expect(map).toEqual(res);
+                    done();
+                }, function (err) {});
+            });
 
         });
 

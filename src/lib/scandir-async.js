@@ -4,10 +4,19 @@
 
     'use strict';
 
+    function sortDirectoryFirst(a, b) {
+        return b.isdir - a.isdir;
+    }
+
+    function sortFilesFirst(a, b) {
+        return a.isdir - b.isdir;
+    }
+
     var dotbase = '.',
         defaults = {
             depth: 0,
-            filters: []
+            filters: [],
+            sorted: false
         },
         //
         // requires
@@ -41,18 +50,35 @@
 
             /**
              *
+             *
+             *
+             */
+            arrange: function (files, order) {
+                order = lodash.isString(order) ? order.toUpperCase() : 'ASC';
+                if (order === 'ASC' || order === 'DESC') {
+                    if (order === 'ASC') {
+                        files.sort(sortDirectoryFirst);
+                    } else {
+                        files.sort(sortFilesFirst);
+                    }
+                }
+            },
+
+            /**
+             *
              * @see https://strongloop.com/strongblog/how-to-compose-node-js-promises-with-q/
              *
              */
-            map: function (entries, callback) {
-                var q;
+            map: function (entries, options, callback) {
+                var res, q;
                 try {
                     q = new Q();
                     return q.then(function () {
                         // inside a `then`, exceptions will be handled in next onRejected
-                        return entries.map(function (node) {
-                            return callback.apply(scandir, [node]);
+                        res = entries.map(function (node) {
+                            return callback.apply(scandir, [node, options]);
                         });
+                        return res;
                     }).all(); // return group promise
                 } catch (e) {
                     throw new Error(e);
@@ -104,7 +130,7 @@
              *
              *
              */
-            build: function (node) {
+            build: function (node, options) {
                 var p, childs, msg, sstats,
                     deferred = Q.defer(),
                     base = node.fullpath;
@@ -132,9 +158,13 @@
                             } else {
                                 node.files = files.map(function (file) {
                                     p = Path.join(base, file);
+                                    // creation de l'item du tree
                                     return scandir.node(p, false);
                                 });
-                                scandir.map(node.files, scandir.build).then(function (res) {
+                                scandir.map(node.files, options, scandir.build).then(function (res) {
+                                    if(options.sorted){
+                                        scandir.arrange(node.files, options.sorted);
+                                    }
                                     deferred.resolve(node);
 
                                 }, function (err) {
@@ -217,8 +247,11 @@
                         } else {
                             // lancement de la recursive
                             child = scandir.node(root, stats);
-                            scandir.build(child).then(function () {
+                            scandir.build(child, options).then(function () {
                                 // renvoi de l'objet main
+                                if (options.sorted) {
+                                    scandir.arrange(child.files, options.sorted);
+                                }
                                 deferred.resolve(child);
 
                             }, function (err) {
