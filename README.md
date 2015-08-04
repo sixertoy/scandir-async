@@ -3,6 +3,7 @@
 [![MIT License][license-img]][license-url] [![NPM version][npm-version-img]][npm-url] [![NPM downloads][npm-downloads-img]][npm-url] [![Build][travis-img]][travis-url] [![Coverage][coverall-img]][coverall-url]
 
 * Iterates trough a directory and returns a js object tree
+* Result can be directories/files sorted first
 
 ## Install
 
@@ -76,6 +77,17 @@ exec([folder], [options]).then(function(data){
 - absolute path
 
 #### Options Object
+
+**Currently implemented**
+
+```javascript
+{
+    sorted: true, // Default
+    sorted: true, // 'ASC'
+    sorted: 'ASC',
+    sorted: 'DESC',
+}
+```
 
 **Not implemented yet**
 
